@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bluefin Shop</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+  input { font: inherit; padding: 6px 8px; width: 100%; box-sizing: border-box; }
+  li { padding: 6px 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; }
+  ul { list-style: none; padding: 0; }
+</style>
+</head>
+<body>
+<h1>Bluefin Shop</h1>
+<input id="q" placeholder="Search products" aria-label="Search products">
+<ul id="list"></ul>
+<script>
+async function load() {
+  const res = await fetch("/api/products?q=" + encodeURIComponent(document.getElementById("q").value));
+  const items = await res.json();
+  document.getElementById("list").innerHTML = items.map((p) =>
+    `<li><span>${p.name}</span><span>$${p.price.toFixed(2)}</span></li>`).join("");
+}
+document.getElementById("q").oninput = load;
+load();
+</script>
+</body>
+</html>
